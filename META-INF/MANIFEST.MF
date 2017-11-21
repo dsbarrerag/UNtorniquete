@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Rsrc-Class-Path: ./ miglayout15-swing.jar jgoodies-forms-1.8.0.jar
+Class-Path: .
+Rsrc-Main-Class: controlador.App
+Main-Class: org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader
+
