@@ -4,11 +4,13 @@ import java.util.Observable;
 
 public abstract class Generator extends Observable implements Runnable {
 
+    public boolean active = true;
+
     abstract long nextTime();
 
     @Override
     public void run() {
-        while(true) {
+        while(active) {
             try {
                 Thread.sleep(nextTime());
                 setChanged();

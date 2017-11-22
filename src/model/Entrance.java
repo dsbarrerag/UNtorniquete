@@ -1,7 +1,7 @@
 package model;
 
-import controller.App;
 import generator.Generator;
+import generator.PoissonGenerator;
 
 import java.util.ArrayList;
 import java.util.Observable;
@@ -10,56 +10,70 @@ import java.util.Random;
 
 public class Entrance implements Observer{
 
-    private boolean bn;
-
     private ArrayList<User> entryQueue = new ArrayList();
     private ArrayList<User> exitQueue = new ArrayList();
-    private Generator entryGenerator, exitGenetator;
+    private Generator entryGenerator, exitGenerator;
 
     private ArrayList<Turnstile> turnstiles;
 
     private Random random;
 
-    public Entrance(int num, double delayMean) {
+    public Entrance() {
         random = new Random();
-        //System.out.println("creados " + num + " torniquetes");
+    }
+
+    public void setTurnstiles(int num, double delayMean){
+        turnstiles = new ArrayList<>();
         initTurnstiles(num, delayMean);
     }
 
     private void initTurnstiles(int num, double delayMean){
-        turnstiles = new ArrayList<>();
         for(int i=0; i < num; i++){
             Turnstile turnstile = new Turnstile(i, delayMean, true);
             turnstile.addObserver(this);
             turnstiles.add(turnstile);
         }
+        if(turnstiles.size() % 2 == 0)
+            setTurnstilesState(turnstiles.size()/2, turnstiles.size()/2);
+        else{
+            int aux = turnstiles.size() - 1;
+            setTurnstilesState((aux/2)+1, aux/2);
+        }
     }
 
     public void setEntryGenerator(Generator generator){
+        if(entryGenerator != null) {
+            entryGenerator.deleteObserver(this);
+            entryGenerator.active = false;
+        }
         entryGenerator = generator;
         entryGenerator.addObserver(this);
         new Thread(entryGenerator).start();
     }
 
     public void setExitGenerator(Generator generator){
-        exitGenetator = generator;
-        exitGenetator.addObserver(this);
-        new Thread(exitGenetator).start();
+        if(exitGenerator != null) {
+            exitGenerator.deleteObserver(this);
+            exitGenerator.active = false;
+        }
+        exitGenerator = generator;
+        exitGenerator.addObserver(this);
+        new Thread(exitGenerator).start();
     }
 
     @Override
     public synchronized void update(Observable observable, Object o) {
 
-        if( observable.equals(exitGenetator) ) {
+        if( observable.equals(exitGenerator) ) {
             exitQueue.add(new User(String.valueOf(random.nextInt())));
-            //System.out.println("En cola para salir: " + exitQueue.size());
+            System.out.println("En cola para salir: " + exitQueue.size());
         } else if( observable.equals(entryGenerator) ){
             entryQueue.add(new User(String.valueOf(random.nextInt())));
-            //System.out.println("En cola para entrar: " + entryQueue.size());
+            System.out.println("En cola para entrar: " + entryQueue.size());
         }
         if(observable.getClass().equals(Turnstile.class)){
             Turnstile current = (Turnstile) observable;
-            //System.out.println("Se desocupa el torniquete: " + current.getId());
+            System.out.println("Se desocupa el torniquete: " + current.getId());
         }
         service();
 
@@ -98,16 +112,19 @@ public class Entrance implements Observer{
         if(enableTurnstiles <= turnstiles.size()){
             for (int i=0; i < entryTurnstiles; i++){
                 turnstiles.get(i).setEntry(true);
-                turnstiles.get(enableTurnstiles).setEnabled(true);
+                turnstiles.get(i).setEnabled(true);
             }
             for (int i=0; i < exitTurnstiles; i++){
                 turnstiles.get(i+entryTurnstiles).setEntry(false);
-                turnstiles.get(enableTurnstiles).setEnabled(true);
+                turnstiles.get(i+entryTurnstiles).setEnabled(true);
             }
             for (int i = enableTurnstiles; i < turnstiles.size(); i++){
                 turnstiles.get(i).setEnabled(false);
             }
         }
+        /*for(Turnstile t: turnstiles){
+            System.out.println("Torniquete: " + t.getId() + " Es entrada: " + t.isEntry());
+        }*/
     }
 
 }

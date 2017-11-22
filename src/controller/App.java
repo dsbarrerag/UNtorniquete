@@ -6,44 +6,56 @@ import model.User;
 import view.Vista;
 
 public class App {
-    private Entrance generador;
+    private Entrance entrance;
     private Vista vista;
     private static App _instance = new App();
 
     public static void main(String[] args) {
-        getInstance().start();
+        getInstance().initialize();
     }
 
-    private App() {
-    }
+    private App() { }
 
     public static App getInstance() {
         return _instance;
     }
 
-    public void crearTiempo(double tEnt, double tSal, int c) {
-        //this.t = new Tiempos(tEnt * 1000.0D, tSal * 1000.0D, c * 1000);
+
+    public void initialize() {
+        entrance = new Entrance();
     }
 
-    public void start() {
-        Entrance e = new Entrance(5, 10);
-        //e.setEntryGenerator(new PoissonGenerator(10));
-        //e.setExitGenerator(new PoissonGenerator(0.2));
-        e.setTurnstilesState(3,1);
-        //this.vista = new Vista();
-        //this.vista.setVisible(true);
+    public void start(){
+
     }
+
+    public void setTurnstiles(int num, double mean){
+        entrance.setTurnstiles(num, mean);
+    }
+
+    public void setEntryGenerator(double mean){
+        entrance.setEntryGenerator(new PoissonGenerator(mean));
+    }
+
+    public void setExitGenerator(double mean){
+        entrance.setExitGenerator(new PoissonGenerator(mean));
+    }
+
+
+
+
+
+
+
+
+    // TODO Borrar esta basofia
 
     public void crear(int num, double tEnt, double tSal, int i) {
-        getInstance().crearTiempo(tEnt, tSal, 1);
-        this.vista.crearTorniquetes(num);
-        this.generador = new Entrance(num, 1);
-        //generador.setGenerator(new PoissonGenerator(10.0));
+
     }
 
     public void crear(int num, double tEnt, double tSal, int personas, double porcentaje) {
-        getInstance().crearTiempo(tEnt, tSal, 1);
-        this.vista.crearTorniquetes(num);
+
     }
 
     public void llegaPersona(User p) {
@@ -59,14 +71,14 @@ public class App {
     }
 
     public int getTiempo() {
-        return 1;
+        return 0;
     }
 
     public int getSalida() {
-        return 1;
+        return 0;
     }
 
     public int getDemora() {
-        return 2;
+        return 0;
     }
 }
