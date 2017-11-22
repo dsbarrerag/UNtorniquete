@@ -107,6 +107,19 @@ public class Entrance implements Observer{
     }
 
 
+    public ArrayList<User> getEntryQueue() {
+        return entryQueue;
+    }
+
+    public ArrayList<User> getExitQueue() {
+        return exitQueue;
+    }
+
+    public ArrayList<Turnstile> getTurnstiles() {
+        return turnstiles;
+    }
+
+    // Este es el metodo machete de la semana
     public void setTurnstilesState(int entryTurnstiles, int exitTurnstiles){
         int enableTurnstiles = entryTurnstiles + exitTurnstiles;
         if(enableTurnstiles <= turnstiles.size()){
