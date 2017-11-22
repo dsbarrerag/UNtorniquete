@@ -1,13 +1,12 @@
 package controller;
 
-import model.Generador;
-import model.Persona;
-import model.Tiempos;
+import generator.PoissonGenerator;
+import model.Entrance;
+import model.User;
 import view.Vista;
 
 public class App {
-    private Tiempos t;
-    private Runnable generador;
+    private Entrance generador;
     private Vista vista;
     private static App _instance = new App();
 
@@ -23,29 +22,31 @@ public class App {
     }
 
     public void crearTiempo(double tEnt, double tSal, int c) {
-        this.t = new Tiempos(tEnt * 1000.0D, tSal * 1000.0D, c * 1000);
+        //this.t = new Tiempos(tEnt * 1000.0D, tSal * 1000.0D, c * 1000);
     }
 
     public void start() {
-        this.vista = new Vista();
-        this.vista.setVisible(true);
+        Entrance e = new Entrance(5, 10);
+        //e.setEntryGenerator(new PoissonGenerator(10));
+        //e.setExitGenerator(new PoissonGenerator(0.2));
+        e.setTurnstilesState(3,1);
+        //this.vista = new Vista();
+        //this.vista.setVisible(true);
     }
 
     public void crear(int num, double tEnt, double tSal, int i) {
         getInstance().crearTiempo(tEnt, tSal, 1);
         this.vista.crearTorniquetes(num);
-        this.generador = new Generador(num, i);
-        (new Thread(this.generador)).start();
+        this.generador = new Entrance(num, 1);
+        //generador.setGenerator(new PoissonGenerator(10.0));
     }
 
     public void crear(int num, double tEnt, double tSal, int personas, double porcentaje) {
         getInstance().crearTiempo(tEnt, tSal, 1);
         this.vista.crearTorniquetes(num);
-        this.generador = new Generador(personas, porcentaje, num);
-        (new Thread(this.generador)).start();
     }
 
-    public void llegaPersona(Persona p) {
+    public void llegaPersona(User p) {
         this.vista.crearPersona(p);
     }
 
@@ -58,14 +59,14 @@ public class App {
     }
 
     public int getTiempo() {
-        return this.t.getT_entrada();
+        return 1;
     }
 
     public int getSalida() {
-        return this.t.getT_salida();
+        return 1;
     }
 
     public int getDemora() {
-        return this.t.getT_demora();
+        return 2;
     }
 }
