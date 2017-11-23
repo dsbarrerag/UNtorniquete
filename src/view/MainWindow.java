@@ -26,6 +26,7 @@ public class MainWindow extends Application{
         Image imageTurnstile = new Image("https://d30y9cdsu7xlg0.cloudfront.net/png/80101-200.png");
         Image imageInArrow = new Image("http://www.clker.com/cliparts/7/8/3/2/11949855931744447303arrow-left-green_benji_p_01.svg.hi.png");
         Image imageOutArrow = new Image("http://www.clker.com/cliparts/O/l/h/r/H/R/red-arrow-right-hi.png");
+        Image imageBuho = new Image("file:images/buho.png");
 
         window = primaryStage;
         window.setTitle("UNTorniquete");
