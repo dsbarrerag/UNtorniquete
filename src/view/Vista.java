@@ -46,7 +46,6 @@ public class Vista extends JFrame {
         } catch (IOException var5) {
             var5.printStackTrace();
         }
-
     }
 
     public void crearTorniquetes(int n) {
