@@ -33,12 +33,6 @@ public class Entrance implements Observer{
             turnstile.addObserver(this);
             turnstiles.add(turnstile);
         }
-        if(turnstiles.size() % 2 == 0)
-            setTurnstilesState(turnstiles.size()/2, turnstiles.size()/2);
-        else{
-            int aux = turnstiles.size() - 1;
-            setTurnstilesState((aux/2)+1, aux/2);
-        }
     }
 
     public void setEntryGenerator(Generator generator){
@@ -106,6 +100,13 @@ public class Entrance implements Observer{
         }
     }
 
+    public Generator getEntryGenerator() {
+        return entryGenerator;
+    }
+
+    public Generator getExitGenerator() {
+        return exitGenerator;
+    }
 
     public ArrayList<User> getEntryQueue() {
         return entryQueue;
