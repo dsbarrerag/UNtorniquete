@@ -1,6 +1,6 @@
 package view;
 
-import model.Persona;
+import model.User;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -66,9 +66,9 @@ public class Vista extends JFrame {
         this.contentPane.add(in);
     }
 
-    public void crearPersona(Persona p) {
-        Circle c = new Circle(p.getColor(), p.getNombre());
-        Point pnt = this.pos(p.isEntrada());
+    public void crearPersona(User p) {
+        Circle c = new Circle(p.getColor(), p.getId());
+        Point pnt = this.pos(p.isGoingIn());
         c.setBounds(pnt.x, pnt.y, 20, 20);
         this.contentPane.add(c);
         this.circulos.add(c);

@@ -1,51 +1,82 @@
 package controller;
 
-import model.Generador;
-import model.Persona;
-import model.Tiempos;
+import analysis.Calculator.MMCCalculator;
+import analysis.Calculator.QueueCalculator;
+import analysis.QueueAnalyzer;
+import generator.PoissonGenerator;
+import model.Entrance;
+import model.Queue;
+import model.User;
 import view.Vista;
 
 public class App {
-    private Tiempos t;
-    private Runnable generador;
+
+    private static int serviceMean = 10;
+
+    private Entrance entrance;
+    private QueueAnalyzer analyzer;
+
     private Vista vista;
     private static App _instance = new App();
 
     public static void main(String[] args) {
-        getInstance().start();
+        getInstance().initialize();
     }
 
-    private App() {
-    }
+    private App() { }
 
     public static App getInstance() {
         return _instance;
     }
 
-    public void crearTiempo(double tEnt, double tSal, int c) {
-        this.t = new Tiempos(tEnt * 1000.0D, tSal * 1000.0D, c * 1000);
+
+    public void initialize() {
+        entrance = new Entrance();
+        analyzer = new QueueAnalyzer();
+        QueueAnalyzer analyzer = new QueueAnalyzer();
     }
 
-    public void start() {
-        this.vista = new Vista();
-        this.vista.setVisible(true);
+    public void start(){
+        analyzer.calculateBest();
     }
+
+    public void setTurnstilesState(int entry, int exit){
+        entrance.setTurnstilesState(entry, exit);
+    }
+
+    public void setTurnstiles(int num, double mean){
+        entrance.setTurnstiles(num, mean);
+        analyzer.setTurnstiles(num);
+    }
+
+    public void setEntryGenerator(double mean){
+        entrance.setEntryGenerator(new PoissonGenerator(mean));
+        analyzer.setEntryQueue(new Queue(mean, serviceMean, 1));
+    }
+
+    public void setExitGenerator(double mean){
+        entrance.setExitGenerator(new PoissonGenerator(mean));
+        analyzer.setExitQueue(new Queue(mean, serviceMean, 1));
+    }
+
+
+
+
+
+
+
+
+    // TODO Borrar esta basofia
 
     public void crear(int num, double tEnt, double tSal, int i) {
-        getInstance().crearTiempo(tEnt, tSal, 1);
-        this.vista.crearTorniquetes(num);
-        this.generador = new Generador(num, i);
-        (new Thread(this.generador)).start();
+
     }
 
     public void crear(int num, double tEnt, double tSal, int personas, double porcentaje) {
-        getInstance().crearTiempo(tEnt, tSal, 1);
-        this.vista.crearTorniquetes(num);
-        this.generador = new Generador(personas, porcentaje, num);
-        (new Thread(this.generador)).start();
+
     }
 
-    public void llegaPersona(Persona p) {
+    public void llegaPersona(User p) {
         this.vista.crearPersona(p);
     }
 
@@ -58,14 +89,14 @@ public class App {
     }
 
     public int getTiempo() {
-        return this.t.getT_entrada();
+        return 0;
     }
 
     public int getSalida() {
-        return this.t.getT_salida();
+        return 0;
     }
 
     public int getDemora() {
-        return this.t.getT_demora();
+        return 0;
     }
 }

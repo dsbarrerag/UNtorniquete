@@ -16,9 +16,14 @@ public class ControlPanel extends JPanel {
         this.t_salida = new JTextField();
         this.t_salida.setColumns(15);
         this.t_entrada = new JTextField();
+<<<<<<< HEAD
         this.t_entrada.setColumns(15);
 
         /*JRadioButton e_cong = new JRadioButton("Entrada Congestionada");
+=======
+        this.t_entrada.setColumns(10);
+        JRadioButton e_cong = new JRadioButton("Entrance Congestionada");
+>>>>>>> develop
         e_cong.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 ControlPanel.this.rutina = 1;
@@ -37,7 +42,7 @@ public class ControlPanel extends JPanel {
         s_cong.setMnemonic('2');
         this.buttonGroup.add(s_cong);
         s_cong.setFont(new Font("Trebuchet MS", 0, 13));
-        JRadioButton sys_cong = new JRadioButton("Entrada y Salida Congestionadas");
+        JRadioButton sys_cong = new JRadioButton("Entrance y Salida Congestionadas");
         sys_cong.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 ControlPanel.this.rutina = 3;
@@ -55,8 +60,14 @@ public class ControlPanel extends JPanel {
         manual.setMnemonic('4');
         this.buttonGroup.add(manual);
         manual.setFont(new Font("Trebuchet MS", 0, 13));
+<<<<<<< HEAD
         */
         JLabel lblTiempoEntrada = new JLabel("Tasa de Entrada");
+=======
+        JLabel lblTorniquetesActivos = new JLabel("Torniquetes Activos");
+        lblTorniquetesActivos.setFont(new Font("Trebuchet MS", 0, 13));
+        JLabel lblTiempoEntrada = new JLabel("Tiempo Entrance");
+>>>>>>> develop
         lblTiempoEntrada.setFont(new Font("Trebuchet MS", 0, 13));
         JLabel lblTiempoSalida = new JLabel("Tasa de Salida");
         lblTiempoSalida.setFont(new Font("Trebuchet MS", 0, 13));
