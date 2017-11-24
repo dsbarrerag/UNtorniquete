@@ -1,7 +1,6 @@
 package model;
 
 import generator.Generator;
-import generator.PoissonGenerator;
 
 import java.util.ArrayList;
 import java.util.Observable;

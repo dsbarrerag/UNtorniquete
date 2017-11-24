@@ -3,7 +3,6 @@ package analysis.Calculator;
 import model.Queue;
 
 import static org.apache.commons.math3.util.ArithmeticUtils.factorialDouble;
-import static org.apache.commons.math3.util.ArithmeticUtils.isPowerOfTwo;
 
 public class MMCCalculator extends QueueCalculator {
 

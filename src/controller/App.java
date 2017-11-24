@@ -1,13 +1,10 @@
 package controller;
 
-import analysis.Calculator.MMCCalculator;
-import analysis.Calculator.QueueCalculator;
 import analysis.QueueAnalyzer;
 import generator.PoissonGenerator;
 import model.Entrance;
 import model.Queue;
-import model.User;
-import view.Vista;
+import sample.Main;
 
 public class App {
 
@@ -16,7 +13,7 @@ public class App {
     private Entrance entrance;
     private QueueAnalyzer analyzer;
 
-    private Vista vista;
+    //private Vista vista;
     private static App _instance = new App();
 
     public static void main(String[] args) {
@@ -34,6 +31,7 @@ public class App {
         entrance = new Entrance();
         analyzer = new QueueAnalyzer();
         QueueAnalyzer analyzer = new QueueAnalyzer();
+        Main.initialize();
     }
 
     public void start(){
@@ -66,37 +64,4 @@ public class App {
 
 
 
-    // TODO Borrar esta basofia
-
-    public void crear(int num, double tEnt, double tSal, int i) {
-
-    }
-
-    public void crear(int num, double tEnt, double tSal, int personas, double porcentaje) {
-
-    }
-
-    public void llegaPersona(User p) {
-        this.vista.crearPersona(p);
-    }
-
-    public void pasarPersona(int i) {
-        this.vista.eliminarPersona(i);
-    }
-
-    public void personaPaso(int i) {
-        this.vista.paso(i);
-    }
-
-    public int getTiempo() {
-        return 0;
-    }
-
-    public int getSalida() {
-        return 0;
-    }
-
-    public int getDemora() {
-        return 0;
-    }
 }
