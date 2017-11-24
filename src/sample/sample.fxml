@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
    <right>
       <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="400.0" prefWidth="213.0" BorderPane.alignment="CENTER">
         <items>
@@ -33,9 +33,9 @@
                         <Label text="Tasa de Entrada" />
                         <Label text="Tasa de Salida" GridPane.rowIndex="1" />
                         <Label text="Numero de Torniquetes" GridPane.rowIndex="2" />
-                        <TextField GridPane.columnIndex="1" />
-                        <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <TextField fx:id="inMeasure" GridPane.columnIndex="1" />
+                        <TextField fx:id="outMeasure" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="numberTor" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                      </children>
                   </GridPane>
                </children>
@@ -44,11 +44,12 @@
                <children>
                   <Pane layoutX="9.0" layoutY="-2.0" prefHeight="200.0" prefWidth="208.0">
                      <children>
-                        <ImageView fitHeight="144.0" fitWidth="112.0" layoutX="48.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="98.0" fitWidth="85.0" layoutX="60.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@buho.png" />
                            </image></ImageView>
-                        <Button layoutX="48.0" layoutY="161.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="104.0" text="Empezar" />
+                        <Button layoutX="48.0" layoutY="161.0" mnemonicParsing="false" onAction="#start" prefHeight="25.0" prefWidth="104.0" text="Empezar" />
+                        <Button layoutX="47.0" layoutY="128.0" mnemonicParsing="false" onAction="#update" prefHeight="25.0" prefWidth="105.0" text="Actualizar" />
                      </children>
                   </Pane>
                </children></AnchorPane>
@@ -58,32 +59,32 @@
    <left>
       <Pane prefHeight="400.0" prefWidth="393.0" BorderPane.alignment="CENTER">
          <children>
-             <ImageView fitHeight="64.0" fitWidth="58.0" layoutX="179.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+             <ImageView fx:id="tor1" fitHeight="64.0" fitWidth="58.0" layoutX="179.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" visible="false">
                  <image>
                      <Image url="@tor.png" />
                  </image>
              </ImageView>
-             <ImageView fitHeight="64.0" fitWidth="58.0" layoutX="179.0" layoutY="304.0" pickOnBounds="true" preserveRatio="true">
+             <ImageView fx:id="tor2" fitHeight="64.0" fitWidth="58.0" layoutX="179.0" layoutY="304.0" pickOnBounds="true" preserveRatio="true" visible="false">
                  <image>
                      <Image url="@tor.png" />
                  </image>
              </ImageView>
-             <ImageView fitHeight="64.0" fitWidth="58.0" layoutX="179.0" layoutY="246.0" pickOnBounds="true" preserveRatio="true">
+             <ImageView fx:id="tor3" fitHeight="64.0" fitWidth="58.0" layoutX="179.0" layoutY="246.0" pickOnBounds="true" preserveRatio="true" visible="false">
                  <image>
                      <Image url="@tor.png" />
                  </image>
              </ImageView>
-             <ImageView fitHeight="64.0" fitWidth="58.0" layoutX="179.0" layoutY="188.0" pickOnBounds="true" preserveRatio="true">
+             <ImageView fx:id="tor4" fitHeight="64.0" fitWidth="58.0" layoutX="179.0" layoutY="188.0" pickOnBounds="true" preserveRatio="true" visible="false">
                  <image>
                      <Image url="@tor.png" />
                  </image>
              </ImageView>
-             <ImageView fitHeight="64.0" fitWidth="58.0" layoutX="179.0" layoutY="130.0" pickOnBounds="true" preserveRatio="true">
+             <ImageView fx:id="tor5" fitHeight="64.0" fitWidth="58.0" layoutX="179.0" layoutY="130.0" pickOnBounds="true" preserveRatio="true" visible="false">
                  <image>
                      <Image url="@tor.png" />
                  </image>
              </ImageView>
-             <ImageView fitHeight="64.0" fitWidth="58.0" layoutX="179.0" layoutY="72.0" pickOnBounds="true" preserveRatio="true">
+             <ImageView fx:id="tor6" fitHeight="64.0" fitWidth="58.0" layoutX="179.0" layoutY="72.0" pickOnBounds="true" preserveRatio="true" visible="false">
                  <image>
                      <Image url="@tor.png" />
                  </image>
