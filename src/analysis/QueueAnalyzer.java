@@ -5,120 +5,102 @@ import analysis.Calculator.QueueCalculator;
 import controller.App;
 import model.Queue;
 
+import java.util.HashMap;
+
 public class QueueAnalyzer {
 
     private final double optimalRho = 0.5;
+    private int max_depth = 1;
 
-    private int entryTurnstiles, exitTurnstiles, totalTurnstiles;
-
+    private int entryTurnstiles, exitTurnstiles;
     private Queue entryQueue, exitQueue;
+    private HashMap<Double,Integer[]> bestValue;
 
     public QueueAnalyzer(){
     }
 
     public void setTurnstiles(int turnstiles) {
         initializeTurnstiles(turnstiles);
-        totalTurnstiles = turnstiles;
+
     }
 
     public void calculateBest(){
-        entryQueue.servers = entryTurnstiles;
-        exitQueue.servers = exitTurnstiles;
+        if(entryQueue != null && exitQueue != null) {
+            bestValue = new HashMap<>();
 
-        entryTurnstiles = reduceTurnstiles(entryTurnstiles, new MMCCalculator(entryQueue), 0);
-        exitTurnstiles = reduceTurnstiles(exitTurnstiles, new MMCCalculator(exitQueue), 0);
+            entryQueue.setServers(entryTurnstiles);
+            exitQueue.setServers(exitTurnstiles);
 
-        moveTurnstiles(entryQueue, exitQueue, 0);
+            double bestDif = moveTurnstiles(entryQueue, exitQueue, 0);
 
-        App.getInstance().setTurnstilesState(entryTurnstiles, exitTurnstiles);
+            if(bestDif == Double.MAX_VALUE)
+                App.getInstance().badQueue();
+            else{
+                Integer[] best = bestValue.get(bestDif);
+
+                entryTurnstiles = best[0];
+                exitTurnstiles = best[1];
+
+            }
+            System.out.println("ENTRADA: " + entryTurnstiles);
+            System.out.println("SALIDA: " + exitTurnstiles);
+
+            App.getInstance().setTurnstilesState(entryTurnstiles, exitTurnstiles);
+        }
     }
 
 
     private double moveTurnstiles(Queue iQueue, Queue oQueue, int depth){
 
-        double diference = 0.0;
-        double addExit = 0.0;
-        double addEntry = 0.0;
+        iQueue.setCalculator(new MMCCalculator());
+        oQueue.setCalculator(new MMCCalculator());
 
-        QueueCalculator iCalculator = new MMCCalculator(iQueue);
-        QueueCalculator oCalculator = new MMCCalculator(oQueue);
+        double entryDif = Double.MAX_VALUE;
+        double exitDif = Double.MAX_VALUE;
+        double currentDif = getDif(iQueue.getWq(), oQueue.getWq());
 
-        try {
-            iCalculator.calculate();
-            oCalculator.calculate();
-        }catch (ArithmeticException ex){
-            System.out.println(ex);
-            return 0.0;
-        }
-        double currentDif = Math.abs(iCalculator.getQueue().wq - oCalculator.getQueue().wq);
+        if(depth <= max_depth){
+            if (oQueue.getServers() > 1)
+                entryDif = moveTurnstiles(new Queue(iQueue.getLambda(), iQueue.getMu(), iQueue.getServers() + 1),
+                        new Queue(oQueue.getLambda(), oQueue.getMu(), oQueue.getServers() - 1), depth + 1);
 
-        if(depth <= 3) {
-            if (iQueue.servers > 1)
-                addExit = moveTurnstiles(new Queue(iQueue.lambda, iQueue.mu, iQueue.servers - 1),
-                        new Queue(oQueue.lambda, oQueue.mu, oQueue.servers + 1), depth + 1);
-
-            if (oQueue.servers > 1)
-                addEntry = moveTurnstiles(new Queue(iQueue.lambda, iQueue.mu, iQueue.servers + 1),
-                        new Queue(oQueue.lambda, oQueue.mu, oQueue.servers - 1), depth + 1);
-
-            if(addEntry == 0.0 && addExit == 0.0) {
-                diference = 0.0;
-            }
-            else if(addEntry == 0.0) {
-                diference = Math.min(addExit,currentDif);
-            }
-            else if(addExit == 0.0) {
-                diference = Math.min(addEntry,currentDif);
-            }
-            else {
-                diference = Math.min(Math.min(addEntry, addExit), currentDif);
-            }
-
-        }else
-            diference = currentDif;
-
-        setFields(currentDif, addEntry, addExit, diference, iQueue, oQueue);
-
-        return diference;
-    }
-
-
-    private void setFields(double currentDif, double addEntry, double addExit, double diference, Queue iQueue, Queue oQueue){
-        if(diference == currentDif){
-            entryTurnstiles = iQueue.servers;
-            exitTurnstiles = oQueue.servers;
-        }else if(diference == addEntry){
-            entryTurnstiles = iQueue.servers+1;
-            exitTurnstiles = oQueue.servers-1;
-        }else if(diference == addExit){
-            entryTurnstiles = iQueue.servers-1;
-            exitTurnstiles = oQueue.servers+1;
+            if (iQueue.getServers() > 1)
+                exitDif = moveTurnstiles(new Queue(iQueue.getLambda(), iQueue.getMu(), iQueue.getServers() - 1),
+                        new Queue(oQueue.getLambda(), oQueue.getMu(), oQueue.getServers() + 1), depth + 1);
         }
 
+        double min = Double.min(Double.min(entryDif, exitDif), currentDif);
+
+        if(min == currentDif)
+            bestValue.put(min, new Integer[]{iQueue.getServers(), oQueue.getServers()});
+
+        return min;
     }
+
+    private double getDif(double a, double b){
+        double dif;
+        if(a == Double.MAX_VALUE || b == Double.MAX_VALUE)
+            dif = Double.MAX_VALUE;
+        else
+            dif = Math.abs(a-b);
+        return dif;
+    }
+
 
     private int reduceTurnstiles(int turnstiles, QueueCalculator calculator, int depth){
-        try {
-            calculator.calculate();
-            if(calculator.getQueue().rho < optimalRho && calculator.getQueue().servers > 1){
-                calculator.getQueue().servers -= 1;
-                reduceTurnstiles(turnstiles, calculator, depth++);
-            }
-        }catch (ArithmeticException e){
-            if(depth > 0)
-                calculator.getQueue().servers += 1;
-        }
-        return calculator.getQueue().servers >= turnstiles ? turnstiles : (calculator.getQueue().servers + 1);
+      return 0;
     }
 
     private void initializeTurnstiles(int numTurnstiles) {
         if(numTurnstiles % 2 == 0){
             entryTurnstiles = numTurnstiles / 2;
             exitTurnstiles = numTurnstiles / 2;
+            max_depth = numTurnstiles / 2;
         } else{
             int aux = numTurnstiles - 1;
             entryTurnstiles = (aux/2)+1;
             exitTurnstiles = aux/2;
+            max_depth = aux/2;
         }
     }
 
@@ -128,6 +110,7 @@ public class QueueAnalyzer {
 
     public void setEntryQueue(Queue entryQueue) {
         this.entryQueue = entryQueue;
+        calculateBest();
     }
 
     public Queue getExitQueue() {
@@ -136,6 +119,7 @@ public class QueueAnalyzer {
 
     public void setExitQueue(Queue exitQueue) {
         this.exitQueue = exitQueue;
+        calculateBest();
     }
 
     public int getEntryTurnstiles() {

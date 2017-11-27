@@ -8,7 +8,7 @@ import sample.Main;
 
 public class App {
 
-    private static int serviceMean = 10;
+    private final int SERVICE_MEAN = 10;
 
     private Entrance entrance;
     private QueueAnalyzer analyzer;
@@ -30,8 +30,13 @@ public class App {
     public void initialize() {
         entrance = new Entrance();
         analyzer = new QueueAnalyzer();
-        QueueAnalyzer analyzer = new QueueAnalyzer();
-        Main.initialize();
+
+        setTurnstiles(13, SERVICE_MEAN);
+
+        setEntryGenerator(1);
+        setExitGenerator(12);
+
+        //Main.initialize();
     }
 
     public void inizializeWoutWindow(){
@@ -54,12 +59,21 @@ public class App {
     }
 
     public void setEntryGenerator(double mean){
+        analyzer.setEntryQueue(new Queue(getLambda(mean), getLambda(SERVICE_MEAN)));
         entrance.setEntryGenerator(new PoissonGenerator(mean));
-        analyzer.setEntryQueue(new Queue(mean, serviceMean, 1));
     }
 
     public void setExitGenerator(double mean){
+        analyzer.setExitQueue(new Queue(getLambda(mean), getLambda(SERVICE_MEAN)));
         entrance.setExitGenerator(new PoissonGenerator(mean));
-        analyzer.setExitQueue(new Queue(mean, serviceMean, 1));
+    }
+
+    public void badQueue() {
+        System.out.println("Con esos valores no se cumple la condicion de estabilidad");
+    }
+
+    private double getLambda(double mean){
+        int timeValue = 60;
+        return timeValue/mean;
     }
 }
