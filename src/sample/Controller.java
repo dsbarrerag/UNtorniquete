@@ -1,10 +1,24 @@
 package sample;
 
 import javafx.fxml.FXML;
+import javafx.scene.Group;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import controller.App;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import model.Turnstile;
+import model.User;
 
-public class Controller {
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
+public class Controller{
 
     @FXML
     private ImageView tor1, tor2, tor3, tor4, tor5, tor6;
@@ -12,7 +26,12 @@ public class Controller {
     @FXML
     private TextField inMeasure, outMeasure, numberTor;
 
-    public void start(){
+    @FXML
+    private Pane circleContainerRight, circleContainerLeft, circleContainerCenter;
+
+    private ArrayList<Circle> usersIn, usersOut;
+
+    public void setup(){
         Integer in, out, numTor;
         in = Integer.parseInt(inMeasure.getText());
         out = Integer.parseInt(outMeasure.getText());
@@ -53,7 +72,28 @@ public class Controller {
                     tor6.setVisible(true);
                     break;
             }
+
+            App.getInstance().inizializeWoutWindow();
+            App.getInstance().setExitGenerator(out);
+            App.getInstance().setEntryGenerator(in);
+            App.getInstance().setTurnstiles(numTor,10);
+            App.getInstance().setTurnstilesState(in, out);
         }
+    }
+
+    public void start(){
+        Integer in, out, numTor;
+        in = Integer.parseInt(inMeasure.getText());
+        out = Integer.parseInt(outMeasure.getText());
+        numTor = Integer.parseInt(numberTor.getText());
+
+        App.getInstance().inizializeWoutWindow();
+        App.getInstance().setExitGenerator(out);
+        App.getInstance().setEntryGenerator(in);
+        App.getInstance().setTurnstiles(numTor,10);
+        App.getInstance().setTurnstilesState(in, out);
+        App.getInstance().start();
+
     }
 
     public void update(){
@@ -113,6 +153,41 @@ public class Controller {
                     break;
             }
         }
+
+    }
+
+    public synchronized void repaintTurnstile(Turnstile turnstile){
+
+    }
+
+
+    public synchronized void systemUsersLeft(User user){
+
+        Group container = new Group();
+
+        Random r = new Random();
+        float randomXY = r.nextFloat() * (164);
+
+        usersOut.add(new Circle(randomXY, randomXY, 5.0f, Color.rgb(user.getColor().getRed(), user.getColor().getGreen(), user.getColor().getBlue())));
+
+        container.getChildren().addAll(usersOut);
+
+        circleContainerLeft.getChildren().add(container);
+
+    }
+
+    public synchronized void systemUsersRight(User user){
+
+        Group container = new Group();
+
+        Random r = new Random();
+        float randomXY = r.nextFloat() * (164);
+
+        usersIn.add(new Circle(randomXY, randomXY, 5.0f, Color.rgb(user.getColor().getRed(), user.getColor().getGreen(), user.getColor().getBlue())));
+
+        container.getChildren().addAll(usersIn);
+
+        circleContainerRight.getChildren().add(container);
     }
 
 }

@@ -34,6 +34,12 @@ public class App {
         Main.initialize();
     }
 
+    public void inizializeWoutWindow(){
+        entrance = new Entrance();
+        analyzer = new QueueAnalyzer();
+        QueueAnalyzer analyzer = new QueueAnalyzer();
+    }
+
     public void start(){
         analyzer.calculateBest();
     }
@@ -56,12 +62,4 @@ public class App {
         entrance.setExitGenerator(new PoissonGenerator(mean));
         analyzer.setExitQueue(new Queue(mean, serviceMean, 1));
     }
-
-
-
-
-
-
-
-
 }
