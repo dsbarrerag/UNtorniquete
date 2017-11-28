@@ -2,8 +2,12 @@ package controller;
 
 import analysis.QueueAnalyzer;
 import generator.PoissonGenerator;
+import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 import model.Entrance;
 import model.Queue;
 import model.Turnstile;
@@ -20,6 +24,7 @@ public class App {
 
     private Entrance entrance;
     private QueueAnalyzer analyzer;
+    private Controller controller;
 
     //private Vista vista;
     private static App _instance = new App();
@@ -38,17 +43,16 @@ public class App {
     public void initialize() {
         entrance = new Entrance();
         analyzer = new QueueAnalyzer();
-
         Main.initialize();
     }
 
 
     //TODO: LLamar con esos 3 valores
-    public void start(int turnstiles, double entryMean, double exitMean){
+    public void start(int turnstiles, double entryMean, double exitMean, Controller controller){
+        this.controller = controller;
         setTurnstiles(turnstiles, SERVICE_MEAN);
         setEntryGenerator(entryMean);
         setExitGenerator(exitMean);
-
         analyzer.calculateBest();
     }
 

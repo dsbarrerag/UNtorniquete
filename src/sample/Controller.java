@@ -32,7 +32,8 @@ public class Controller{
     private ArrayList<Circle> usersIn, usersOut;
 
     public void setup(){
-        Integer in, out, numTor;
+        App.getInstance().start(3,3,3, this);
+        /*Integer in, out, numTor;
         in = Integer.parseInt(inMeasure.getText());
         out = Integer.parseInt(outMeasure.getText());
         numTor = Integer.parseInt(numberTor.getText());
@@ -72,13 +73,15 @@ public class Controller{
                     tor6.setVisible(true);
                     break;
             }
+            System.out.println("no hace nada?");
 
-            App.getInstance().inizializeWoutWindow();
+
+*//*          App.getInstance().inizializeWoutWindow();
             App.getInstance().setExitGenerator(out);
             App.getInstance().setEntryGenerator(in);
             App.getInstance().setTurnstiles(numTor,10);
-            App.getInstance().setTurnstilesState(in, out);
-        }
+            App.getInstance().setTurnstilesState(in, out);*//*
+        }*/
     }
 
     public void start(){
@@ -87,12 +90,14 @@ public class Controller{
         out = Integer.parseInt(outMeasure.getText());
         numTor = Integer.parseInt(numberTor.getText());
 
-        App.getInstance().inizializeWoutWindow();
+
+
+/*       App.getInstance().inizializeWoutWindow();
         App.getInstance().setExitGenerator(out);
         App.getInstance().setEntryGenerator(in);
         App.getInstance().setTurnstiles(numTor,10);
         App.getInstance().setTurnstilesState(in, out);
-        App.getInstance().start();
+        App.getInstance().start();*/
 
     }
 
@@ -156,11 +161,8 @@ public class Controller{
 
     }
 
-    public synchronized ImageView repaintTurnstile(Turnstile turnstile){
-        System.out.println("WTF DUDE?");
-        return tor1;
+    public void repaintTurnstile(Turnstile turnstile){
     }
-
 
     public synchronized void systemUsersLeft(User user){
 
@@ -186,7 +188,5 @@ public class Controller{
 
         circleContainerRight.getChildren().add(container);
     }
-
-
 
 }
