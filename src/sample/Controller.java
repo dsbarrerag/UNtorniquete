@@ -156,23 +156,20 @@ public class Controller{
 
     }
 
-    public synchronized void repaintTurnstile(Turnstile turnstile){
-
+    public synchronized ImageView repaintTurnstile(Turnstile turnstile){
+        System.out.println("WTF DUDE?");
+        return tor1;
     }
 
 
     public synchronized void systemUsersLeft(User user){
-
-        Group container = new Group();
 
         Random r = new Random();
         float randomXY = r.nextFloat() * (164);
 
         usersOut.add(new Circle(randomXY, randomXY, 5.0f, Color.rgb(user.getColor().getRed(), user.getColor().getGreen(), user.getColor().getBlue())));
 
-        container.getChildren().addAll(usersOut);
-
-        circleContainerLeft.getChildren().add(container);
+        circleContainerLeft.getChildren().addAll(usersOut.get(0));
 
     }
 
@@ -189,5 +186,7 @@ public class Controller{
 
         circleContainerRight.getChildren().add(container);
     }
+
+
 
 }

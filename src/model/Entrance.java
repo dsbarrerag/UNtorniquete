@@ -1,5 +1,6 @@
 package model;
 
+import controller.App;
 import generator.Generator;
 
 import java.util.ArrayList;
@@ -58,14 +59,19 @@ public class Entrance implements Observer{
     public synchronized void update(Observable observable, Object o) {
 
         if( observable.equals(exitGenerator) ) {
-            exitQueue.add(new User(String.valueOf(random.nextInt())));
+            User user = new User(String.valueOf(random.nextInt()));
+            exitQueue.add(user);
+            App.getInstance().createEntryUser(user);
             System.out.println("En cola para salir: " + exitQueue.size());
         } else if( observable.equals(entryGenerator) ){
-            entryQueue.add(new User(String.valueOf(random.nextInt())));
+            User user = new User(String.valueOf(random.nextInt()));
+            entryQueue.add(user);
+            App.getInstance().createExitUser(user);
             System.out.println("En cola para entrar: " + entryQueue.size());
         }
         if(observable.getClass().equals(Turnstile.class)){
             Turnstile current = (Turnstile) observable;
+            App.getInstance().freeTurnstile(current);
             System.out.println("Se desocupa el torniquete: " + current.getId());
         }
         service();
@@ -83,6 +89,7 @@ public class Entrance implements Observer{
         for(Turnstile t: turnstiles){
             if(t.isEnabled() && t.isEntry() && !t.isBusy()){
                 entryQueue.remove(0);
+                App.getInstance().userIn(t);
                 new Thread(t).start();
                 break;
             }
@@ -93,6 +100,7 @@ public class Entrance implements Observer{
         for(Turnstile t: turnstiles){
             if(t.isEnabled() && !t.isEntry() && !t.isBusy()){
                 exitQueue.remove(0);
+                App.getInstance().userOut(t);
                 new Thread(t).start();
                 break;
             }

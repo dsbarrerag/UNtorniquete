@@ -2,9 +2,17 @@ package controller;
 
 import analysis.QueueAnalyzer;
 import generator.PoissonGenerator;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.layout.Pane;
 import model.Entrance;
 import model.Queue;
+import model.Turnstile;
+import model.User;
+import sample.Controller;
 import sample.Main;
+
+import javax.swing.text.html.ImageView;
+import java.io.IOException;
 
 public class App {
 
@@ -31,26 +39,25 @@ public class App {
         entrance = new Entrance();
         analyzer = new QueueAnalyzer();
 
-        setTurnstiles(13, SERVICE_MEAN);
-
-        setEntryGenerator(1);
-        setExitGenerator(12);
-
-        //Main.initialize();
+        Main.initialize();
     }
 
-    public void inizializeWoutWindow(){
-        entrance = new Entrance();
-        analyzer = new QueueAnalyzer();
-        QueueAnalyzer analyzer = new QueueAnalyzer();
-    }
 
-    public void start(){
+    //TODO: LLamar con esos 3 valores
+    public void start(int turnstiles, double entryMean, double exitMean){
+        setTurnstiles(turnstiles, SERVICE_MEAN);
+        setEntryGenerator(entryMean);
+        setExitGenerator(exitMean);
+
         analyzer.calculateBest();
     }
 
-    public void setTurnstilesState(int entry, int exit){
-        entrance.setTurnstilesState(entry, exit);
+    //TODO: llamar siempre que se cambie alguno de los valores
+    public void update(double entryMean, double exitMean) {
+        setEntryGenerator(entryMean);
+        setExitGenerator(exitMean);
+
+        analyzer.calculateBest();
     }
 
     public void setTurnstiles(int num, double mean){
@@ -69,11 +76,39 @@ public class App {
     }
 
     public void badQueue() {
+        //TODO mostrar ese mensaje en un popup
         System.out.println("Con esos valores no se cumple la condicion de estabilidad");
     }
 
     private double getLambda(double mean){
         int timeValue = 60;
         return timeValue/mean;
+    }
+
+    //TODO LLamar metodos de la interfaz
+
+    public void setTurnstilesState(int entry, int exit){
+        entrance.setTurnstilesState(entry, exit);
+        //Dice cuantos torniquetes son de entrada y cuantos de salida
+    }
+
+    public void createEntryUser(User user) {
+        // Agregar usuario a la cola de entrada
+    }
+
+    public void createExitUser(User user) {
+        // Agregar usuario a la cola de salida
+    }
+
+    public void freeTurnstile(Turnstile t) {
+        // Desocupar el torniquete t
+    }
+
+    public void userIn(Turnstile t) {
+        //Ocupar el torniquete t y remover usuario de la cola de entrada
+    }
+
+    public void userOut(Turnstile t) {
+        //Ocupar el torniquete t y remover usuario de la cola de salida
     }
 }

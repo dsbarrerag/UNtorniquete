@@ -9,9 +9,14 @@ import javafx.stage.StageStyle;
 
 public class Main extends Application {
 
+    Controller controller;
+
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("sample.fxml"));
+        Parent root = loader.load();
+
         primaryStage.setTitle("UN Torniquete");
         primaryStage.setScene(new Scene(root, 650, 400));
         primaryStage.show();
