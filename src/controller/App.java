@@ -3,6 +3,7 @@ package controller;
 import analysis.QueueAnalyzer;
 import generator.PoissonGenerator;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -60,7 +61,6 @@ public class App {
     public void update(double entryMean, double exitMean) {
         setEntryGenerator(entryMean);
         setExitGenerator(exitMean);
-
         analyzer.calculateBest();
     }
 
@@ -94,14 +94,30 @@ public class App {
     public void setTurnstilesState(int entry, int exit){
         entrance.setTurnstilesState(entry, exit);
         //Dice cuantos torniquetes son de entrada y cuantos de salida
+
     }
 
     public void createEntryUser(User user) {
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                // Update UI here.
+                controller.systemUsersRight(user);
+            }
+        });
+
         // Agregar usuario a la cola de entrada
     }
 
     public void createExitUser(User user) {
-        // Agregar usuario a la cola de salida
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                // Update UI here.
+                controller.systemUsersLeft(user);
+            }
+        });
     }
 
     public void freeTurnstile(Turnstile t) {
@@ -110,9 +126,23 @@ public class App {
 
     public void userIn(Turnstile t) {
         //Ocupar el torniquete t y remover usuario de la cola de entrada
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                // Update UI here.
+                controller.pullUserIn();
+            }
+        });
     }
 
     public void userOut(Turnstile t) {
         //Ocupar el torniquete t y remover usuario de la cola de salida
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                // Update UI here.
+                controller.pullUserOut();
+            }
+        });
     }
 }

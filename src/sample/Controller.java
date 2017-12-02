@@ -11,12 +11,8 @@ import javafx.scene.shape.Circle;
 import model.Turnstile;
 import model.User;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 public class Controller{
 
@@ -32,11 +28,13 @@ public class Controller{
     private ArrayList<Circle> usersIn, usersOut;
 
     public void setup(){
-        App.getInstance().start(3,3,3, this);
-        /*Integer in, out, numTor;
+        usersIn = new ArrayList<>();
+        usersOut = new ArrayList<>();
+        Integer in, out, numTor;
         in = Integer.parseInt(inMeasure.getText());
         out = Integer.parseInt(outMeasure.getText());
         numTor = Integer.parseInt(numberTor.getText());
+        App.getInstance().start(numTor, in, out, this);
         if(in > 0 && out >0 && numTor > 0 && numTor < 7 ){
             switch (numTor){
                 case 1:
@@ -73,15 +71,7 @@ public class Controller{
                     tor6.setVisible(true);
                     break;
             }
-            System.out.println("no hace nada?");
-
-
-*//*          App.getInstance().inizializeWoutWindow();
-            App.getInstance().setExitGenerator(out);
-            App.getInstance().setEntryGenerator(in);
-            App.getInstance().setTurnstiles(numTor,10);
-            App.getInstance().setTurnstilesState(in, out);*//*
-        }*/
+        }
     }
 
     public void start(){
@@ -90,15 +80,10 @@ public class Controller{
         out = Integer.parseInt(outMeasure.getText());
         numTor = Integer.parseInt(numberTor.getText());
 
-
-
-/*       App.getInstance().inizializeWoutWindow();
         App.getInstance().setExitGenerator(out);
         App.getInstance().setEntryGenerator(in);
         App.getInstance().setTurnstiles(numTor,10);
         App.getInstance().setTurnstilesState(in, out);
-        App.getInstance().start();*/
-
     }
 
     public void update(){
@@ -167,26 +152,42 @@ public class Controller{
     public synchronized void systemUsersLeft(User user){
 
         Random r = new Random();
-        float randomXY = r.nextFloat() * (164);
+        float randomX = r.nextFloat() * (164);
+        float randomY = r.nextFloat() * (344);
 
-        usersOut.add(new Circle(randomXY, randomXY, 5.0f, Color.rgb(user.getColor().getRed(), user.getColor().getGreen(), user.getColor().getBlue())));
+        usersOut.add(new Circle(randomX, randomY, 5.0f, Color.rgb(user.getColor().getRed(), user.getColor().getGreen(), user.getColor().getBlue())));
 
-        circleContainerLeft.getChildren().addAll(usersOut.get(0));
+        circleContainerLeft.getChildren().add(usersOut.get(usersOut.size()-1));
 
     }
 
     public synchronized void systemUsersRight(User user){
 
-        Group container = new Group();
-
         Random r = new Random();
-        float randomXY = r.nextFloat() * (164);
+        float randomX = r.nextFloat() * (164);
+        float randomY = r.nextFloat() * (344);
 
-        usersIn.add(new Circle(randomXY, randomXY, 5.0f, Color.rgb(user.getColor().getRed(), user.getColor().getGreen(), user.getColor().getBlue())));
+        usersIn.add(new Circle(randomX, randomY, 5.0f, Color.rgb(user.getColor().getRed(), user.getColor().getGreen(), user.getColor().getBlue())));
 
-        container.getChildren().addAll(usersIn);
+        circleContainerRight.getChildren().add(usersIn.get(usersIn.size()-1));
+    }
 
-        circleContainerRight.getChildren().add(container);
+    public synchronized void pullUserIn(){
+        try{
+            Circle user = usersIn.remove(usersIn.size()-1);
+            circleContainerRight.getChildren().removeAll(user);
+        }catch (Exception e){
+
+        }
+    }
+
+    public synchronized void pullUserOut(){
+        try{
+            Circle user = usersOut.remove(usersOut.size()-1);
+            circleContainerLeft.getChildren().removeAll(user);
+        }catch (Exception e){
+
+        }
     }
 
 }
